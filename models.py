@@ -31,7 +31,7 @@ class MaintenanceItem(models.Model):
     name = models.CharField(max_length=75)
     procedure = models.TextField()
     check_occurrence = models.ForeignKey(Occurrence)
-    help_videos = models.ManyToManyField("MaintenanceItemVideo")
+    help_videos = models.ManyToManyField("MaintenanceItemVideo", blank=True)
     
     def __unicode__(self):
         return self.name
