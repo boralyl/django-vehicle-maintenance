@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.db import models
 
 
@@ -8,22 +10,37 @@ class Vehicle(models.Model):
     make = models.CharField(max_length=50)
     model = models.CharField(max_length=75)
     year = models.PositiveSmallIntegerField()
-    
+
     def __unicode__(self):
         return " ".join((str(self.year), self.make, self.model))
 
-        
+
 class Occurrence(models.Model):
     """
     Store occurrence options
     """
     name = models.CharField(max_length=50)
     num_days = models.PositiveSmallIntegerField(verbose_name="Number of Days")
-    
+
     def __unicode__(self):
         return self.name
-        
-        
+
+
+class MaintenanceItemManager(models.Manager):
+    """
+    Manager fuctions for the MaintenanceItem model
+    """
+
+    def get_outstanding_items(self):
+        """
+        Returns a list of outstanding maintenance items
+        """
+        return [i for i in MaintenanceItem.objects.all()
+            if not i.maintenanceitemcheck_set.filter(
+                date__gte=(
+                    date.today() - timedelta(days=i.check_occurrence.num_days)))]
+
+
 class MaintenanceItem(models.Model):
     """
     A generic table for entering maintenance items for your vehicle
@@ -32,11 +49,13 @@ class MaintenanceItem(models.Model):
     procedure = models.TextField()
     check_occurrence = models.ForeignKey(Occurrence)
     help_videos = models.ManyToManyField("MaintenanceItemVideo", blank=True)
-    
+
+    objects = MaintenanceItemManager()
+
     def __unicode__(self):
         return self.name
 
-        
+
 class MaintenanceItemVideo(models.Model):
     """
     Stores videos helpful to a maintenance item
@@ -48,7 +67,7 @@ class MaintenanceItemVideo(models.Model):
     def __unicode__(self):
         return self.title
 
-        
+
 class MaintenanceItemCheck(models.Model):
     """
     Store recors for when a maintenance item is checked
@@ -58,7 +77,6 @@ class MaintenanceItemCheck(models.Model):
     date = models.DateField(auto_now_add=True)
     notes = models.TextField()
     is_passable = models.BooleanField(default=True)
-    
+
     def __unicode__(self):
         return "%s - %s" % (self.date, self.maintenance_item.name)
-    
