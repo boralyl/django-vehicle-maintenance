@@ -1,0 +1,4 @@
+syntax: glob
+*.pyc
+settings/development.py
+settings/production.py
