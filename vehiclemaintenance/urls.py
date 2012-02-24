@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-from vehicle.views import OustandingMaintenanceItemsList
+from vehiclemaintenance.views import OustandingMaintenanceItemsList
 
 
 urlpatterns = patterns('',

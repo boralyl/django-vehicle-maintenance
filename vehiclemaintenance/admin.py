@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from vehicle.models import MaintenanceItem, MaintenanceItemVideo, Occurrence, Vehicle
+from vehiclemaintenance.models import MaintenanceItem, MaintenanceItemVideo
+from vehiclemaintenance.models import Occurrence, Vehicle
 
 
 class MaintenanceItemAdmin(admin.ModelAdmin):

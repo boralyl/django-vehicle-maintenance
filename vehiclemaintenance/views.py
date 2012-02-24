@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 
-from vehicle.models import MaintenanceItem
+from vehiclemaintenance.models import MaintenanceItem
 
 
 class OustandingMaintenanceItemsList(ListView):
