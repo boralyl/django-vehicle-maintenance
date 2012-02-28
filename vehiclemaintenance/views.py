@@ -10,5 +10,5 @@ class OustandingMaintenanceItemsList(ListView):
     """
     context_object_name = "maintenance_items"
     queryset = MaintenanceItem.objects.get_outstanding_items()
-    template_name = "vehicle/outstanding_items_list.html"
+    template_name = "vehiclemaintenance/outstanding_items_list.html"
 

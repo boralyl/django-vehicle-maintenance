@@ -1,0 +1,50 @@
+[
+    {
+        "pk": 2, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Daily", 
+            "num_days": 1
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Weekly", 
+            "num_days": 7
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Monthly", 
+            "num_days": 30
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Bi-Montly", 
+            "num_days": 60
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Semi-Annually", 
+            "num_days": 90
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "vehiclemaintenance.occurrence", 
+        "fields": {
+            "name": "Yearly", 
+            "num_days": 365
+        }
+    }
+]

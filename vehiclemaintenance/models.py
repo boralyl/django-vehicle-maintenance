@@ -22,6 +22,9 @@ class Occurrence(models.Model):
     name = models.CharField(max_length=50)
     num_days = models.PositiveSmallIntegerField(verbose_name="Number of Days")
 
+    class Meta:
+        ordering = ('num_days', 'name')
+
     def __unicode__(self):
         return self.name
 
