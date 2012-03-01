@@ -81,5 +81,8 @@ class MaintenanceItemCheck(models.Model):
     notes = models.TextField()
     is_passable = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ('-date', )
+
     def __unicode__(self):
         return "%s - %s" % (self.date, self.maintenance_item.name)
