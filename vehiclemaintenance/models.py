@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -7,10 +8,14 @@ class Vehicle(models.Model):
     """
     Defines a vehicle, going to keep it relatively generic
     """
+    user = models.ForeignKey(User)
     make = models.CharField(max_length=50)
     model = models.CharField(max_length=75)
     year = models.PositiveSmallIntegerField()
 
+    class Meta:
+        ordering = ('-year', 'make', 'model')
+    
     def __unicode__(self):
         return " ".join((str(self.year), self.make, self.model))
 
@@ -75,6 +80,7 @@ class MaintenanceItemCheck(models.Model):
     """
     Store recors for when a maintenance item is checked
     """
+    user = models.ForeignKey(User)
     vehicle = models.ForeignKey(Vehicle)
     maintenance_item = models.ForeignKey(MaintenanceItem)
     date = models.DateField(auto_now_add=True)
