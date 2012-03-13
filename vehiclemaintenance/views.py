@@ -13,8 +13,13 @@ class OustandingMaintenanceItemsList(ListView):
     Lists outstanding mainetance tasks for a user
     """
     context_object_name = "maintenance_items"
-    queryset = MaintenanceItem.objects.get_outstanding_items()
     template_name = "vehiclemaintenance/outstanding_items_list.html"
+    
+    def get_queryset(self):
+        """
+        Only show maintenance items for the logged in user
+        """
+        return MaintenanceItem.objects.get_outstanding_items(self.request.user)
 
 
 class HistoryList(ListView):
@@ -22,9 +27,29 @@ class HistoryList(ListView):
     Lists history of recent maintenance item checks
     """
     context_object_name = "check_history"
-    queryset = MaintenanceItemCheck.objects.all()
     template_name = "vehiclemaintenance/history_list.html"
     
+    def get_queryset(self):
+        """
+        Only show maintenance items for the logged in user
+        """
+        return MaintenanceItemCheck.objects.filter(user=self.request.user)
+    
+    
+class UpcomingList(ListView):
+    """
+    Lists upcoming maintenance items that are due.
+    """
+    context_object_name = "maintenance_items"
+    template_name = "vehiclemaintenance/upcoming_list.html"
+    
+    def get_queryset(self):
+        """
+        Only show maintenance items for the logged in user
+        """
+        return MaintenanceItem.objects.get_upcoming_items(self.request.user,
+            num_days=7)
+
     
 class VehicleList(ListView):
     """
@@ -42,6 +67,9 @@ class VehicleList(ListView):
 
 @login_required
 def item_check(request, item_id):
+    """
+    Allow users to input a maintenance check
+    """
     temp_vars = {}
     item = get_object_or_404(MaintenanceItem, pk=item_id)
     vehicles = request.user.vehicle_set.all()
@@ -91,3 +119,18 @@ def delete_vehicle(request, vehicle_id):
     if vehicle.user == request.user:
         vehicle.delete()
     return redirect("vm-vehicles")
+
+    
+@login_required
+def dashboard(request):
+    """
+    Shows upcoming and outstanding items for a user
+    """
+    temp_vars = {}
+    
+    temp_vars['outstanding_items'] = MaintenanceItem.objects.get_outstanding_items(
+        request.user)
+    temp_vars['upcoming_items'] = MaintenanceItem.objects.get_upcoming_items(
+        request.user, num_days=7)
+    
+    return render(request, "vehiclemaintenance/dashboard.html", temp_vars)

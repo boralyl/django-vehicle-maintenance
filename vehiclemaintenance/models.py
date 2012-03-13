@@ -39,14 +39,23 @@ class MaintenanceItemManager(models.Manager):
     Manager fuctions for the MaintenanceItem model
     """
 
-    def get_outstanding_items(self):
+    def get_outstanding_items(self, user):
         """
         Returns a list of outstanding maintenance items
         """
         return [i for i in MaintenanceItem.objects.all()
-            if not i.maintenanceitemcheck_set.filter(
+            if not i.maintenanceitemcheck_set.filter(user=user,
                 date__gte=(
                     date.today() - timedelta(days=i.check_occurrence.num_days)))]
+    
+    def get_upcoming_items(self, user, num_days):
+        """
+        Returns a list of items upcoming in `num_days` days based on the last 
+        check date.
+        """
+        return [i for i in MaintenanceItem.objects.all()
+            for c in i.maintenanceitemcheck_set.filter(user=user)[:1]
+                if (date.today() - c.date).days + num_days >= i.check_occurrence.num_days]
 
 
 class MaintenanceItem(models.Model):
